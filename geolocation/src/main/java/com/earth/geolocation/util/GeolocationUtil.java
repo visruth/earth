@@ -85,21 +85,21 @@ public strictfp class GeolocationUtil {
 	public static Geolocation getGeolocationAddedByDistance(double latitudeFrom, double longitudeFrom, double bearing,
 			double distance, DistanceUnit distanceUnit) {
 
-		double φ1 = Math.toRadians(latitudeFrom);
-		double λ1 = Math.toRadians(longitudeFrom);
+		double phi1 = Math.toRadians(latitudeFrom);
+		double lambda1 = Math.toRadians(longitudeFrom);
 
 		double R = RADIUS_OF_EARTH / distanceUnit.getMetres();
 
-		double θ = Math.toRadians(bearing);
-		double δ = distance / R;
+		double theta = Math.toRadians(bearing);
+		double delta = distance / R;
 
-		double φ2 = Math.asin(Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ));
+		double phi2 = Math.asin(Math.sin(phi1) * Math.cos(delta) + Math.cos(phi1) * Math.sin(delta) * Math.cos(theta));
 
-		double λ2 = λ1
-				+ Math.atan2(Math.sin(θ) * Math.sin(δ) * Math.cos(φ1), Math.cos(δ) - Math.sin(φ1) * Math.sin(φ2));
+		double lambda2 = lambda1
+				+ Math.atan2(Math.sin(theta) * Math.sin(delta) * Math.cos(phi1), Math.cos(delta) - Math.sin(phi1) * Math.sin(phi2));
 
-		double latitudeTo = Math.toDegrees(φ2);
-		double longitudeTo = (Math.toDegrees(λ2) + 540) % 360 - 180;
+		double latitudeTo = Math.toDegrees(phi2);
+		double longitudeTo = (Math.toDegrees(lambda2) + 540) % 360 - 180;
 
 		return new Geolocation(latitudeTo, longitudeTo);
 	}
