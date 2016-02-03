@@ -95,8 +95,8 @@ public strictfp class GeolocationUtil {
 
 		double phi2 = Math.asin(Math.sin(phi1) * Math.cos(delta) + Math.cos(phi1) * Math.sin(delta) * Math.cos(theta));
 
-		double lambda2 = lambda1
-				+ Math.atan2(Math.sin(theta) * Math.sin(delta) * Math.cos(phi1), Math.cos(delta) - Math.sin(phi1) * Math.sin(phi2));
+		double lambda2 = lambda1 + Math.atan2(Math.sin(theta) * Math.sin(delta) * Math.cos(phi1),
+				Math.cos(delta) - Math.sin(phi1) * Math.sin(phi2));
 
 		double latitudeTo = Math.toDegrees(phi2);
 		double longitudeTo = (Math.toDegrees(lambda2) + 540) % 360 - 180;
@@ -187,6 +187,37 @@ public strictfp class GeolocationUtil {
 
 		geocircle.setDiameter(averageDiameter);
 		return geocircle;
+	}
+
+	/**
+	 * calculates and returns the bearing. The resultant angle will be from 360
+	 * (i.e. 0) to 359.
+	 * 
+	 * @param latitudeFrom
+	 * @param longitudeFrom
+	 * @param latitudeTo
+	 * @param longitudeTo
+	 * @return the bearing (i.e. the angle made from (latitudeFrom,
+	 *         longitudeFrom) to (latitudeTo, longitudeTo).)
+	 */
+	public static double getBearingBetweenPoints(double latitudeFrom, double longitudeFrom, double latitudeTo,
+			double longitudeTo) {
+
+		double phi1 = Math.toRadians(latitudeFrom);
+		double lambda1 = Math.toRadians(longitudeFrom);
+
+		double phi2 = Math.toRadians(latitudeTo);
+		double lambda2 = Math.toRadians(longitudeTo);
+
+		double y = Math.sin(lambda2 - lambda1) * Math.cos(phi2);
+
+		double x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(lambda2 - lambda1);
+
+		double bearing = Math.toDegrees(Math.atan2(y, x));
+
+		bearing = (bearing + 360) % 360;
+
+		return bearing;
 	}
 
 }
